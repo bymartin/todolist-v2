@@ -79,8 +79,11 @@ app.get("/:customListName", function (req, res) {
           name: customListName,
           items: defaultItems,
         });
-        list.save();
-        res.redirect("/" + customListName);
+        // redirect with callback bc save is async to avoid multiple lists
+        list.save(function() {
+          res.redirect("/" + customListName);
+        });
+        
       } else {
         // show existing list
         res.render("list", {
